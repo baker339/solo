@@ -17,6 +17,11 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 import ProfileStack from "./navigation/ProfileStack";
 import ClimbingJournalPage from "./screens/ClimbingJournalPage";
 import HomeScreen from "./screens/HomeScreen";
+import SplashScreen from "./screens/SplashScreen";
+import QuizScreen from "./screens/QuizScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import LoginPage from "./screens/LoginPage";
+import RegisterPage from "./screens/RegisterPage";
 
 // Polyfill for setImmediate
 if (typeof setImmediate === "undefined") {
@@ -24,6 +29,7 @@ if (typeof setImmediate === "undefined") {
 }
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const iconNames: { [key: string]: string } = {
   Home: "home-outline",
@@ -57,24 +63,35 @@ const MainApp: React.FC = () => {
   return (
     <AuthProvider>
       <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ color, size }) => {
-              const iconName = iconNames[route.name] || "help-outline";
-              return <Icon name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: theme === "dark" ? "#ffffff" : "#2d6a4f",
-            tabBarInactiveTintColor: theme === "dark" ? "#999999" : "#ccc",
-          })}
-        >
-          {/* <Tab.Screen name="Login" component={LoginPage} />
-          <Tab.Screen name="Register" component={RegisterPage} /> */}
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Training Plans" component={TrainingPlanPage} />
-          <Tab.Screen name="Progress" component={ProgressAnalyticsPage} />
-          <Tab.Screen name="Journal" component={ClimbingJournalPage} />
-          <Tab.Screen name="Profile" component={ProfileStack} />
-        </Tab.Navigator>
+        {user ? (
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                const iconName = iconNames[route.name] || "help-outline";
+                return <Icon name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: theme === "dark" ? "#ffffff" : "#2d6a4f",
+              tabBarInactiveTintColor: theme === "dark" ? "#999999" : "#ccc",
+            })}
+          >
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Training Plans" component={TrainingPlanPage} />
+            <Tab.Screen name="Progress" component={ProgressAnalyticsPage} />
+            <Tab.Screen name="Journal" component={ClimbingJournalPage} />
+            <Tab.Screen name="Profile" component={ProfileStack} />
+          </Tab.Navigator>
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Splash"
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen name="Register" component={RegisterPage} />
+            <Stack.Screen name="Quiz" component={QuizScreen} />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </AuthProvider>
   );

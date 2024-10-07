@@ -6,11 +6,12 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login, loginWithGoogle } = useAuth();
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      useAuth().login(email, password);
+      login(email, password);
     } catch (error) {
       console.log(error);
     } finally {
@@ -20,7 +21,7 @@ const LoginPage: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      await useAuth().loginWithGoogle();
+      await loginWithGoogle();
       // Handle successful Google login
     } catch (error) {
       console.error(error);

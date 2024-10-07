@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { useAuth } from "../context/AuthContext";
 
 const RegisterPage: React.FC = () => {
@@ -10,12 +9,12 @@ const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
+  const { register } = useAuth();
 
   const handleRegister = async () => {
     setLoading(true);
     try {
-      useAuth().register(email, password, name);
+      register(email, password, name);
     } catch (error) {
       console.log(error);
     } finally {
