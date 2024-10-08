@@ -4,6 +4,7 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { generateTrainingPlan } from "../../services/chatgptService";
+import { useTheme } from "../../context/ThemeContext";
 
 interface TrainingPlansProps {
   userId: string;
@@ -12,6 +13,7 @@ interface TrainingPlansProps {
 const TrainingPlans: React.FC<TrainingPlansProps> = ({ userId }) => {
   const [trainingPlan, setTrainingPlan] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     const fetchTrainingPlan = async () => {
@@ -59,8 +61,8 @@ const TrainingPlans: React.FC<TrainingPlansProps> = ({ userId }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Training Plan</Text>
+    <View style={currentTheme.container}>
+      <Text style={currentTheme.title}>Your Training Plan</Text>
       <Text style={styles.plan}>{trainingPlan}</Text>
       <Button title="Regenerate Training Plan" onPress={handleRegeneratePlan} />
     </View>

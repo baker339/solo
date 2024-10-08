@@ -15,14 +15,15 @@ import ProgressAnalyticsPage from "./components/ProgressAnalytics/ProgressAnalyt
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "./FirebaseConfig";
+import ClimbingStack from "./navigation/ClimbingStack";
 import ProfileStack from "./navigation/ProfileStack";
 import TrainingPlansStack from "./navigation/TrainingPlansStack";
-import ClimbingJournalPage from "./screens/ClimbingJournalPage";
 import HomeScreen from "./screens/HomeScreen";
 import LoginPage from "./screens/NewUsers/LoginPage";
-import QuizScreen from "./screens/QuizScreen";
 import RegisterPage from "./screens/NewUsers/RegisterPage";
 import SplashScreen from "./screens/NewUsers/SplashScreen";
+import QuizScreen from "./screens/QuizScreen";
+import BetaSuggestionPage from "./screens/BetaSuggestionPage";
 
 // Polyfill for setImmediate
 if (typeof setImmediate === "undefined") {
@@ -95,9 +96,13 @@ const MainApp: React.FC = () => {
             <Tab.Screen name="Training Plans">
               {() => <TrainingPlansStack userId={user.uid} />}
             </Tab.Screen>
-            <Tab.Screen name="Progress" component={ProgressAnalyticsPage} />
-            <Tab.Screen name="Journal" component={ClimbingJournalPage} />
+            {/* <Tab.Screen name="Progress" component={ProgressAnalyticsPage} /> */}
+            <Tab.Screen name="Journal" component={ClimbingStack} />
             <Tab.Screen name="Profile" component={ProfileStack} />
+            <Tab.Screen
+              name="Beta Suggestions"
+              component={BetaSuggestionPage}
+            />
           </Tab.Navigator>
         ) : (
           <Stack.Navigator>

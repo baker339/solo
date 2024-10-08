@@ -5,6 +5,7 @@ import Slider from "@react-native-community/slider"; // Import Slider from the c
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import Checkbox from "../../components/Common/Checkbox";
+import { useTheme } from "../../context/ThemeContext";
 
 interface AssessmentQuizProps {
   userId: string;
@@ -28,6 +29,7 @@ const AssessmentQuiz: React.FC<AssessmentQuizProps> = ({ userId }) => {
       other: false,
     }
   );
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     const checkQuizStatus = async () => {
@@ -69,7 +71,7 @@ const AssessmentQuiz: React.FC<AssessmentQuizProps> = ({ userId }) => {
   }
 
   return (
-    <View>
+    <View style={currentTheme.container}>
       {/* Question 1: Climbing experience */}
       <Text>1. How long have you been climbing?</Text>
       <Slider

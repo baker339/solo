@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { useTheme } from "../../context/ThemeContext";
 
 interface Workout {
   id: string;
@@ -23,6 +24,7 @@ const ProgressTracking: React.FC = () => {
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState("");
   const [notes, setNotes] = useState("");
+  const { currentTheme } = useTheme();
 
   // Fetch workouts from Firestore
   const fetchWorkouts = async () => {
@@ -59,8 +61,8 @@ const ProgressTracking: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Progress Tracking</Text>
+    <View style={currentTheme.container}>
+      <Text style={currentTheme.title}>Progress Tracking</Text>
 
       <FlatList
         data={workouts}
@@ -79,20 +81,20 @@ const ProgressTracking: React.FC = () => {
         placeholder="Activity"
         value={activity}
         onChangeText={setActivity}
-        style={styles.input}
+        style={currentTheme.input}
       />
       <TextInput
         placeholder="Duration (minutes)"
         value={duration}
         onChangeText={setDuration}
         keyboardType="numeric"
-        style={styles.input}
+        style={currentTheme.input}
       />
       <TextInput
         placeholder="Notes"
         value={notes}
         onChangeText={setNotes}
-        style={styles.input}
+        style={currentTheme.input}
       />
       <Button title="Add Workout" onPress={addWorkout} />
     </View>
