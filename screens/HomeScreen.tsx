@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { useThemeStyles } from "../styles/themeStyles";
+import { useTheme } from "../context/ThemeContext"; // Update this import
 
 const HomeScreen: React.FC = () => {
-  const styles = useThemeStyles();
+  const { currentTheme } = useTheme(); // Get currentTheme from context
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Solo</Text>
-      <Text style={styles.text}>
+    <View style={currentTheme.container}>
+      <Text style={currentTheme.text}>Welcome to Solo</Text>
+      <Text style={currentTheme.text}>
         Navigate to different sections using the tabs below.
       </Text>
     </View>

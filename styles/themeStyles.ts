@@ -1,6 +1,3 @@
-import { DefaultTheme, DarkTheme } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
-
 const lightThemeColors = {
   primary: "#006d77", // Teal for outdoorsy feel
   background: "#ffffff",
@@ -19,55 +16,91 @@ const darkThemeColors = {
   notification: "#ffb703",
 };
 
-export const themeStyles = {
+const themeStyles = {
   light: {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      ...lightThemeColors,
+    colors: lightThemeColors,
+    container: {
+      flex: 1,
+      backgroundColor: lightThemeColors.background,
+      padding: 16,
+    },
+    textInput: {
+      padding: 10,
+      borderWidth: 1,
+      borderColor: lightThemeColors.border,
+      borderRadius: 5,
+      backgroundColor: lightThemeColors.background,
+    },
+    button: {
+      backgroundColor: lightThemeColors.notification,
+      padding: 10,
+      borderRadius: 5,
+      alignItems: "center",
+    },
+    buttonText: {
+      color: "#ffffff",
+      fontWeight: "bold",
+    },
+    text: {
+      color: lightThemeColors.text,
+      fontSize: 16,
+      fontWeight: "400" as const, // Updated to a specific weight
+    },
+    title: {
+      color: lightThemeColors.text,
+      fontSize: 24,
+      fontWeight: "bold" as const, // Updated to a specific weight
+    },
+    profilePicture: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+      alignSelf: "center",
     },
   },
   dark: {
-    ...DarkTheme,
-    colors: {
-      ...DarkTheme.colors,
-      ...darkThemeColors,
+    colors: darkThemeColors,
+    container: {
+      flex: 1,
+      backgroundColor: darkThemeColors.background,
+      padding: 16,
+    },
+    textInput: {
+      padding: 10,
+      borderWidth: 1,
+      borderColor: darkThemeColors.border,
+      borderRadius: 5,
+      backgroundColor: darkThemeColors.card,
+    },
+    button: {
+      backgroundColor: darkThemeColors.notification,
+      padding: 10,
+      borderRadius: 5,
+      alignItems: "center",
+    },
+    buttonText: {
+      color: "#ffffff",
+      fontWeight: "bold",
+    },
+    text: {
+      color: darkThemeColors.text,
+      fontSize: 16,
+      fontWeight: "400" as const, // Updated to a specific weight
+    },
+    title: {
+      color: darkThemeColors.text,
+      fontSize: 24,
+      fontWeight: "bold" as const, // Updated to a specific weight
+    },
+    profilePicture: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+      alignSelf: "center",
     },
   },
 };
 
-export const commonStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  textInput: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#c4c4c4",
-    borderRadius: 5,
-    backgroundColor: "#ffffff",
-  },
-  textInputDark: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#4a4e69",
-    borderRadius: 5,
-    backgroundColor: "#2b2d42",
-  },
-  button: {
-    backgroundColor: "#ffb703",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#ffffff",
-    fontWeight: "bold",
-  },
-});
-
-export const themeTextInputStyles = (theme: "light" | "dark") => ({
-  textInput:
-    theme === "light" ? commonStyles.textInput : commonStyles.textInputDark,
-});
+export { themeStyles };

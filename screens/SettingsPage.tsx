@@ -1,36 +1,20 @@
 import React from "react";
-import { View, Text, Switch, StyleSheet } from "react-native";
-import { useTheme } from "../context/ThemeContext"; // Assuming useTheme hook is already in place
-import { themeTextInputStyles, commonStyles } from "../styles/themeStyles"; // Import new theme styles
+import { View, Text, Switch } from "react-native";
+import { useTheme } from "../context/ThemeContext";
 
 const SettingsPage: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
-
+  const { currentTheme, toggleTheme, theme } = useTheme();
   return (
-    <View style={[commonStyles.container, themeStyles(theme).container]}>
-      <Text style={themeStyles(theme).text}>Settings</Text>
-
-      <View style={styles.settingItem}>
-        <Text style={themeStyles(theme).text}>Dark Mode</Text>
-        <Switch
-          value={darkMode}
-          onValueChange={(value) => {
-            setDarkMode(value);
-            toggleTheme(); // Toggling theme
-          }}
-        />
-      </View>
+    <View style={currentTheme.container}>
+      <Text style={currentTheme.text}>Dark Mode</Text>
+      <Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={currentTheme.colors.primary}
+        onValueChange={toggleTheme}
+        value={theme === "dark"}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  settingItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-});
 
 export default SettingsPage;

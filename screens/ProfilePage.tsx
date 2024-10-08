@@ -1,59 +1,82 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { View, Text, Button } from "react-native";
-import { useThemeStyles } from "../styles/themeStyles";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { RootStackParamList } from "../types/navigation";
+import { Alert, Button, StyleSheet, View } from "react-native";
+import { FIRESTORE_DB } from "../FirebaseConfig";
+import InputField from "../components/Common/InputField";
+import ProfilePicture from "../components/UserProfile/ProfilePicture";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { RootStackParamList } from "../types/navigation"; // Ensure this points to your types
 
 const ProfilePage: React.FC = () => {
-  const styles = useThemeStyles();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { currentTheme } = useTheme();
   const [userData, setUserData] = useState<any>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-  //   useEffect(() => {
-  //     if (user) {
-  //       const fetchUserData = async () => {
-  //         const userDoc = await firestore()
-  //           .collection("users")
-  //           .doc(user.uid)
-  //           .get();
-  //         setUserData(userDoc.data());
-  //       };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());
+          setName(userDoc.data()?.name);
+          setEmail(userDoc.data()?.email);
+        }
+      }
+    };
 
-  //       fetchUserData();
-  //     }
-  //   }, [user]);
+    fetchUserData();
+  }, [user]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigation.navigate("Login"); // Navigate to your Login screen
-    } catch (error) {
-      console.error("Logout failed:", error);
+  const handleSave = async () => {
+    if (user) {
+      const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
+      await updateDoc(userDocRef, { name, email });
+      Alert.alert("Profile updated successfully!");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      {user ? (
-        <>
-          <Text style={styles.text}>Name: {user.name ?? ""}</Text>
-          <Text style={styles.text}>Email: {user.email ?? ""}</Text>
-          {/* <Text style={styles.text}>Goals: {user.goals.join(", ") ?? ""}</Text> */}
-          <Button title="Logout" onPress={handleLogout} />
-        </>
-      ) : (
-        <Text style={styles.text}>Loading user data...</Text>
-      )}
-
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: currentTheme.colors.background },
+      ]}
+    >
+      <ProfilePicture
+        uri={userData?.profilePictureUrl || "default_image_url"}
+      />
+      <InputField value={name} onChangeText={setName} placeholder="Name" />
+      <InputField
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      <Button
+        title="Save"
+        onPress={handleSave}
+        color={currentTheme.colors.primary}
+      />
       <Button
         title="Go to Settings"
-        onPress={() => navigation.navigate("Settings")} // Navigate to Settings screen
+        onPress={() => navigation.navigate("Settings" as never)}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    alignItems: "center",
+  },
+});
 
 export default ProfilePage;
