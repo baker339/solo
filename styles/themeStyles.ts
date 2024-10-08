@@ -56,7 +56,22 @@ const themeStyles = {
       height: 100,
       borderRadius: 50,
       marginBottom: 20,
-      alignSelf: "center",
+      alignSelf: "center" as
+        | "auto"
+        | "flex-start"
+        | "flex-end"
+        | "center"
+        | "baseline"
+        | "stretch",
+    },
+    input: {
+      height: 40,
+      borderColor: "gray",
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      backgroundColor: "#fff", // Light mode input background
     },
   },
   dark: {
@@ -98,7 +113,22 @@ const themeStyles = {
       height: 100,
       borderRadius: 50,
       marginBottom: 20,
-      alignSelf: "center",
+      alignSelf: "center" as
+        | "auto"
+        | "flex-start"
+        | "flex-end"
+        | "center"
+        | "baseline"
+        | "stretch",
+    },
+    input: {
+      height: 40,
+      borderColor: "lightgray",
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      backgroundColor: "#444", // Dark mode input background
     },
   },
 };

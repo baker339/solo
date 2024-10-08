@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, TextInput, Image } from "react-native";
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import React, { useEffect, useState } from "react";
+import { Button, Image, TextInput, View } from "react-native";
 import { useAuth } from "../../context/AuthContext";
-import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useTheme } from "../../context/ThemeContext";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
 
-const ProfilePage = () => {
+interface ProfilePictureProps {
+  uri: string; // Ensure uri is a string
+}
+
+const ProfilePage: React.FC<ProfilePictureProps> = ({ uri }) => {
   const { user } = useAuth(); // Assuming you have a user context
   const [name, setName] = useState("");
   const [profilePicture, setProfilePicture] = useState("");

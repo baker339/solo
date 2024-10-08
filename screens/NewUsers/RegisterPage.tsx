@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { useAuth } from "../context/AuthContext"; // Adjust the import as needed
+import { useAuth } from "../../context/AuthContext"; // Adjust the import as needed
 
 type RegisterPageProps = {
   navigation: StackNavigationProp<any>;

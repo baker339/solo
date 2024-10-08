@@ -4,25 +4,25 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { onAuthStateChanged, User } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import "react-native-get-random-values";
 import Icon from "react-native-vector-icons/Ionicons";
 import ProgressAnalyticsPage from "./components/ProgressAnalytics/ProgressAnalyticsPage";
-import TrainingPlanPage from "./components/TrainingPlan/TrainingPlanPage";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "./FirebaseConfig";
 import ProfileStack from "./navigation/ProfileStack";
+import TrainingPlansStack from "./navigation/TrainingPlansStack";
 import ClimbingJournalPage from "./screens/ClimbingJournalPage";
 import HomeScreen from "./screens/HomeScreen";
-import SplashScreen from "./screens/SplashScreen";
+import LoginPage from "./screens/NewUsers/LoginPage";
 import QuizScreen from "./screens/QuizScreen";
-import { createStackNavigator } from "@react-navigation/stack";
-import LoginPage from "./screens/LoginPage";
-import RegisterPage from "./screens/RegisterPage";
-import { doc, getDoc } from "firebase/firestore";
+import RegisterPage from "./screens/NewUsers/RegisterPage";
+import SplashScreen from "./screens/NewUsers/SplashScreen";
 
 // Polyfill for setImmediate
 if (typeof setImmediate === "undefined") {
@@ -92,7 +92,9 @@ const MainApp: React.FC = () => {
             })}
           >
             <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Training Plans" component={TrainingPlanPage} />
+            <Tab.Screen name="Training Plans">
+              {() => <TrainingPlansStack userId={user.uid} />}
+            </Tab.Screen>
             <Tab.Screen name="Progress" component={ProgressAnalyticsPage} />
             <Tab.Screen name="Journal" component={ClimbingJournalPage} />
             <Tab.Screen name="Profile" component={ProfileStack} />

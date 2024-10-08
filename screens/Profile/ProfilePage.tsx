@@ -2,12 +2,12 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, View } from "react-native";
-import { FIRESTORE_DB } from "../FirebaseConfig";
-import InputField from "../components/Common/InputField";
-import ProfilePicture from "../components/UserProfile/ProfilePicture";
-import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
-import { RootStackParamList } from "../types/navigation"; // Ensure this points to your types
+import { FIRESTORE_DB } from "../../FirebaseConfig";
+import InputField from "../../components/Common/InputField";
+import ProfilePicture from "../../components/UserProfile/ProfilePicture";
+import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
+import { RootStackParamList } from "../../types/navigation"; // Ensure this points to your types
 
 const ProfilePage: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

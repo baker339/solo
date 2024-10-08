@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ProfilePage from "../screens/ProfilePage";
-import SettingsPage from "../screens/SettingsPage";
+import ProfilePage from "../screens/Profile/ProfilePage";
+import SettingsPage from "../screens/Profile/SettingsPage";
 import QuizScreen from "../screens/QuizScreen";
 
 const Stack = createStackNavigator();

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Switch } from "react-native";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const SettingsPage: React.FC = () => {
   const { currentTheme, toggleTheme, theme } = useTheme();
