@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { ActivityIndicator, Button, Text, TextInput, View } from "react-native";
 import { useAuth } from "../context/AuthContext";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const LoginPage: React.FC = () => {
+type LoginPageProps = {
+  navigation: StackNavigationProp<any>;
+};
+
+const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, user } = useAuth();
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      login(email, password);
+      await login(email, password);
+      navigation.navigate("MainApp");
+      console.log({ user });
     } catch (error) {
       console.log(error);
     } finally {

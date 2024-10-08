@@ -4,16 +4,18 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  User,
 } from "firebase/auth";
-import firestore from "firebase/firestore";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
+import firestore, { doc, getDoc, setDoc } from "firebase/firestore";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../FirebaseConfig";
 
 type AuthContextType = {
   user: any;
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
-  register: (email: string, password: string, name: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateUserData: (user: User, data: any) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -37,18 +39,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, password: string) => {
     const userCredential = await createUserWithEmailAndPassword(
-      auth,
+      FIREBASE_AUTH,
       email,
       password
     );
-    // await firestore().collection("users").doc(userCredential.user.uid).set({
-    //   name,
-    //   email,
-    //   goals: [], // Initialize with an empty goals array
-    //   settings: {}, // Add default settings here
-    // });
+    const user = userCredential.user;
+
+    // Add user data to Firestore
+    await setDoc(doc(FIRESTORE_DB, "users", user.uid), {
+      hasTakenQuiz: false,
+      quizResponses: null,
+      email: email,
+    });
+  };
+
+  const updateUserData = async (user: User, data: any) => {
+    const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
+    await setDoc(userDocRef, {
+      ...data,
+    });
+
+    setUser(getDoc(userDocRef));
   };
 
   const loginWithGoogle = async () => {
@@ -62,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, login, loginWithGoogle, register, logout }}
+      value={{ user, login, loginWithGoogle, register, logout, updateUserData }}
     >
       {children}
     </AuthContext.Provider>

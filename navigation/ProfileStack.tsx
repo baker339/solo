@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfilePage from "../screens/ProfilePage";
 import SettingsPage from "../screens/SettingsPage";
+import QuizScreen from "../screens/QuizScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const ProfileStack: React.FC = () => {
         component={SettingsPage}
         options={{ title: "Settings" }} // Show header for Settings
       />
+      <Stack.Screen name="Quiz" component={QuizScreen} />
     </Stack.Navigator>
   );
 };

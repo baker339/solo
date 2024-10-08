@@ -13,7 +13,7 @@ import ProgressAnalyticsPage from "./components/ProgressAnalytics/ProgressAnalyt
 import TrainingPlanPage from "./components/TrainingPlan/TrainingPlanPage";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
-import { FIREBASE_AUTH } from "./FirebaseConfig";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "./FirebaseConfig";
 import ProfileStack from "./navigation/ProfileStack";
 import ClimbingJournalPage from "./screens/ClimbingJournalPage";
 import HomeScreen from "./screens/HomeScreen";
@@ -22,6 +22,7 @@ import QuizScreen from "./screens/QuizScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginPage from "./screens/LoginPage";
 import RegisterPage from "./screens/RegisterPage";
+import { doc, getDoc } from "firebase/firestore";
 
 // Polyfill for setImmediate
 if (typeof setImmediate === "undefined") {
@@ -52,18 +53,34 @@ const App: React.FC = () => {
 const MainApp: React.FC = () => {
   const { theme } = useTheme();
   const [user, setUser] = useState<User | null>(null);
+  const [hasTakenQuiz, setHasTakenQuiz] = useState<boolean | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log({ user });
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       setUser(user);
+
+      if (user) {
+        const userDoc = doc(FIRESTORE_DB, "users", user.uid);
+        const docSnap = await getDoc(userDoc);
+
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          setHasTakenQuiz(userData.hasTakenQuiz); // Set the state based on user data
+        } else {
+          console.log("No such document!");
+        }
+      } else {
+        setHasTakenQuiz(null); // Reset if not logged in
+      }
     });
+
+    return () => unsubscribe();
   }, []);
 
   return (
     <AuthProvider>
       <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
-        {user ? (
+        {user && hasTakenQuiz ? (
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ color, size }) => {
